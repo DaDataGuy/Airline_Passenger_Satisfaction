@@ -1,0 +1,503 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "03454b2c",
+   "metadata": {},
+   "source": [
+    "### Always Printing out the Current Version of Python This Notebook Runs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "8af909e2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Python Version is: 3.11.2 | packaged by Anaconda, Inc. | (main, Mar 27 2023, 23:35:04) [MSC v.1916 64 bit (AMD64)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sys\n",
+    "print(\"Python Version is: \" + sys.version)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "67390bd8",
+   "metadata": {},
+   "source": [
+    "### Importing Libraries and Changing Settings"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "69909893",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import xgboost as xgb\n",
+    "import seaborn as sns\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "#sns.set(color_codes = True)\n",
+    "#sns.set(style=\"whitegrid\")\n",
+    "#sns.set_palette(\"Set3\")\n",
+    "\n",
+    "# Get multiple outputs in the same cell\n",
+    "from IPython.core.interactiveshell import InteractiveShell\n",
+    "InteractiveShell.ast_node_interactivity = \"all\"\n",
+    "\n",
+    "# Ignore all warnings\n",
+    "import warnings\n",
+    "warnings.filterwarnings('ignore')\n",
+    "warnings.filterwarnings(action='ignore', category=DeprecationWarning)\n",
+    "pd.set_option('display.max_columns', None)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a1450633",
+   "metadata": {},
+   "source": [
+    "### Importing Cleaned & normalized CSV dataset"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "9176dab5",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "FileNotFoundError",
+     "evalue": "[Errno 2] No such file or directory: 'Cleaned DF/_Normalized_XGBoost_DF.csv'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mFileNotFoundError\u001b[0m                         Traceback (most recent call last)",
+      "Cell \u001b[1;32mIn[3], line 2\u001b[0m\n\u001b[0;32m      1\u001b[0m \u001b[38;5;66;03m# For cluster analysis\u001b[39;00m\n\u001b[1;32m----> 2\u001b[0m df \u001b[38;5;241m=\u001b[39m pd\u001b[38;5;241m.\u001b[39mread_csv(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mCleaned DF/_Normalized_XGBoost_DF.csv\u001b[39m\u001b[38;5;124m\"\u001b[39m)\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\util\\_decorators.py:211\u001b[0m, in \u001b[0;36mdeprecate_kwarg.<locals>._deprecate_kwarg.<locals>.wrapper\u001b[1;34m(*args, **kwargs)\u001b[0m\n\u001b[0;32m    209\u001b[0m     \u001b[38;5;28;01melse\u001b[39;00m:\n\u001b[0;32m    210\u001b[0m         kwargs[new_arg_name] \u001b[38;5;241m=\u001b[39m new_arg_value\n\u001b[1;32m--> 211\u001b[0m \u001b[38;5;28;01mreturn\u001b[39;00m func(\u001b[38;5;241m*\u001b[39margs, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwargs)\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\util\\_decorators.py:331\u001b[0m, in \u001b[0;36mdeprecate_nonkeyword_arguments.<locals>.decorate.<locals>.wrapper\u001b[1;34m(*args, **kwargs)\u001b[0m\n\u001b[0;32m    325\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mlen\u001b[39m(args) \u001b[38;5;241m>\u001b[39m num_allow_args:\n\u001b[0;32m    326\u001b[0m     warnings\u001b[38;5;241m.\u001b[39mwarn(\n\u001b[0;32m    327\u001b[0m         msg\u001b[38;5;241m.\u001b[39mformat(arguments\u001b[38;5;241m=\u001b[39m_format_argument_list(allow_args)),\n\u001b[0;32m    328\u001b[0m         \u001b[38;5;167;01mFutureWarning\u001b[39;00m,\n\u001b[0;32m    329\u001b[0m         stacklevel\u001b[38;5;241m=\u001b[39mfind_stack_level(),\n\u001b[0;32m    330\u001b[0m     )\n\u001b[1;32m--> 331\u001b[0m \u001b[38;5;28;01mreturn\u001b[39;00m func(\u001b[38;5;241m*\u001b[39margs, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwargs)\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\io\\parsers\\readers.py:950\u001b[0m, in \u001b[0;36mread_csv\u001b[1;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, error_bad_lines, warn_bad_lines, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options)\u001b[0m\n\u001b[0;32m    935\u001b[0m kwds_defaults \u001b[38;5;241m=\u001b[39m _refine_defaults_read(\n\u001b[0;32m    936\u001b[0m     dialect,\n\u001b[0;32m    937\u001b[0m     delimiter,\n\u001b[1;32m   (...)\u001b[0m\n\u001b[0;32m    946\u001b[0m     defaults\u001b[38;5;241m=\u001b[39m{\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mdelimiter\u001b[39m\u001b[38;5;124m\"\u001b[39m: \u001b[38;5;124m\"\u001b[39m\u001b[38;5;124m,\u001b[39m\u001b[38;5;124m\"\u001b[39m},\n\u001b[0;32m    947\u001b[0m )\n\u001b[0;32m    948\u001b[0m kwds\u001b[38;5;241m.\u001b[39mupdate(kwds_defaults)\n\u001b[1;32m--> 950\u001b[0m \u001b[38;5;28;01mreturn\u001b[39;00m _read(filepath_or_buffer, kwds)\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\io\\parsers\\readers.py:605\u001b[0m, in \u001b[0;36m_read\u001b[1;34m(filepath_or_buffer, kwds)\u001b[0m\n\u001b[0;32m    602\u001b[0m _validate_names(kwds\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mnames\u001b[39m\u001b[38;5;124m\"\u001b[39m, \u001b[38;5;28;01mNone\u001b[39;00m))\n\u001b[0;32m    604\u001b[0m \u001b[38;5;66;03m# Create the parser.\u001b[39;00m\n\u001b[1;32m--> 605\u001b[0m parser \u001b[38;5;241m=\u001b[39m TextFileReader(filepath_or_buffer, \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwds)\n\u001b[0;32m    607\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m chunksize \u001b[38;5;129;01mor\u001b[39;00m iterator:\n\u001b[0;32m    608\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m parser\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\io\\parsers\\readers.py:1442\u001b[0m, in \u001b[0;36mTextFileReader.__init__\u001b[1;34m(self, f, engine, **kwds)\u001b[0m\n\u001b[0;32m   1439\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39moptions[\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mhas_index_names\u001b[39m\u001b[38;5;124m\"\u001b[39m] \u001b[38;5;241m=\u001b[39m kwds[\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mhas_index_names\u001b[39m\u001b[38;5;124m\"\u001b[39m]\n\u001b[0;32m   1441\u001b[0m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mhandles: IOHandles \u001b[38;5;241m|\u001b[39m \u001b[38;5;28;01mNone\u001b[39;00m \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;01mNone\u001b[39;00m\n\u001b[1;32m-> 1442\u001b[0m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_engine \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_make_engine(f, \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mengine)\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\io\\parsers\\readers.py:1735\u001b[0m, in \u001b[0;36mTextFileReader._make_engine\u001b[1;34m(self, f, engine)\u001b[0m\n\u001b[0;32m   1733\u001b[0m     \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mb\u001b[39m\u001b[38;5;124m\"\u001b[39m \u001b[38;5;129;01mnot\u001b[39;00m \u001b[38;5;129;01min\u001b[39;00m mode:\n\u001b[0;32m   1734\u001b[0m         mode \u001b[38;5;241m+\u001b[39m\u001b[38;5;241m=\u001b[39m \u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mb\u001b[39m\u001b[38;5;124m\"\u001b[39m\n\u001b[1;32m-> 1735\u001b[0m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mhandles \u001b[38;5;241m=\u001b[39m get_handle(\n\u001b[0;32m   1736\u001b[0m     f,\n\u001b[0;32m   1737\u001b[0m     mode,\n\u001b[0;32m   1738\u001b[0m     encoding\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39moptions\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mencoding\u001b[39m\u001b[38;5;124m\"\u001b[39m, \u001b[38;5;28;01mNone\u001b[39;00m),\n\u001b[0;32m   1739\u001b[0m     compression\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39moptions\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mcompression\u001b[39m\u001b[38;5;124m\"\u001b[39m, \u001b[38;5;28;01mNone\u001b[39;00m),\n\u001b[0;32m   1740\u001b[0m     memory_map\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39moptions\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mmemory_map\u001b[39m\u001b[38;5;124m\"\u001b[39m, \u001b[38;5;28;01mFalse\u001b[39;00m),\n\u001b[0;32m   1741\u001b[0m     is_text\u001b[38;5;241m=\u001b[39mis_text,\n\u001b[0;32m   1742\u001b[0m     errors\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39moptions\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mencoding_errors\u001b[39m\u001b[38;5;124m\"\u001b[39m, \u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mstrict\u001b[39m\u001b[38;5;124m\"\u001b[39m),\n\u001b[0;32m   1743\u001b[0m     storage_options\u001b[38;5;241m=\u001b[39m\u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39moptions\u001b[38;5;241m.\u001b[39mget(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mstorage_options\u001b[39m\u001b[38;5;124m\"\u001b[39m, \u001b[38;5;28;01mNone\u001b[39;00m),\n\u001b[0;32m   1744\u001b[0m )\n\u001b[0;32m   1745\u001b[0m \u001b[38;5;28;01massert\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mhandles \u001b[38;5;129;01mis\u001b[39;00m \u001b[38;5;129;01mnot\u001b[39;00m \u001b[38;5;28;01mNone\u001b[39;00m\n\u001b[0;32m   1746\u001b[0m f \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mhandles\u001b[38;5;241m.\u001b[39mhandle\n",
+      "File \u001b[1;32m~\\anaconda3\\envs\\DataScience-3-11-2\\Lib\\site-packages\\pandas\\io\\common.py:856\u001b[0m, in \u001b[0;36mget_handle\u001b[1;34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)\u001b[0m\n\u001b[0;32m    851\u001b[0m \u001b[38;5;28;01melif\u001b[39;00m \u001b[38;5;28misinstance\u001b[39m(handle, \u001b[38;5;28mstr\u001b[39m):\n\u001b[0;32m    852\u001b[0m     \u001b[38;5;66;03m# Check whether the filename is to be opened in binary mode.\u001b[39;00m\n\u001b[0;32m    853\u001b[0m     \u001b[38;5;66;03m# Binary mode does not support 'encoding' and 'newline'.\u001b[39;00m\n\u001b[0;32m    854\u001b[0m     \u001b[38;5;28;01mif\u001b[39;00m ioargs\u001b[38;5;241m.\u001b[39mencoding \u001b[38;5;129;01mand\u001b[39;00m \u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mb\u001b[39m\u001b[38;5;124m\"\u001b[39m \u001b[38;5;129;01mnot\u001b[39;00m \u001b[38;5;129;01min\u001b[39;00m ioargs\u001b[38;5;241m.\u001b[39mmode:\n\u001b[0;32m    855\u001b[0m         \u001b[38;5;66;03m# Encoding\u001b[39;00m\n\u001b[1;32m--> 856\u001b[0m         handle \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mopen\u001b[39m(\n\u001b[0;32m    857\u001b[0m             handle,\n\u001b[0;32m    858\u001b[0m             ioargs\u001b[38;5;241m.\u001b[39mmode,\n\u001b[0;32m    859\u001b[0m             encoding\u001b[38;5;241m=\u001b[39mioargs\u001b[38;5;241m.\u001b[39mencoding,\n\u001b[0;32m    860\u001b[0m             errors\u001b[38;5;241m=\u001b[39merrors,\n\u001b[0;32m    861\u001b[0m             newline\u001b[38;5;241m=\u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124m\"\u001b[39m,\n\u001b[0;32m    862\u001b[0m         )\n\u001b[0;32m    863\u001b[0m     \u001b[38;5;28;01melse\u001b[39;00m:\n\u001b[0;32m    864\u001b[0m         \u001b[38;5;66;03m# Binary mode\u001b[39;00m\n\u001b[0;32m    865\u001b[0m         handle \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mopen\u001b[39m(handle, ioargs\u001b[38;5;241m.\u001b[39mmode)\n",
+      "\u001b[1;31mFileNotFoundError\u001b[0m: [Errno 2] No such file or directory: 'Cleaned DF/_Normalized_XGBoost_DF.csv'"
+     ]
+    }
+   ],
+   "source": [
+    "# For cluster analysis\n",
+    "df = pd.read_csv(\"Cleaned DF/_Normalized_XGBoost_DF.csv\") "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "db24224e",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "af67fa2c",
+   "metadata": {},
+   "source": [
+    "### Creating a new dataframe from a copy of the original but only with ID and Satisfaction columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a3d46d83",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "selected_columns = ['ID', 'Satisfaction']\n",
+    "new_df = df[selected_columns].copy()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a9e111ca",
+   "metadata": {},
+   "source": [
+    "### Importing the model from the train/test split on my other notebook"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ef5890a6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import joblib\n",
+    "\n",
+    "# Load the model from the file\n",
+    "model = joblib.load('Saved_Models\\XGBoost_model.pkl')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b49908a5",
+   "metadata": {},
+   "source": [
+    "### Running the model againts the entire dataset, no need to tweak anything, that was done in other notebook"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "eadaf0ba",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Assuming you have already loaded the model as 'model' and have the dataset as 'df'\n",
+    "\n",
+    "# Drop any unnecessary columns if needed\n",
+    "columns_to_drop = ['ID','Satisfaction']\n",
+    "df = df.drop(columns=columns_to_drop)\n",
+    "\n",
+    "# Make predictions on the dataset\n",
+    "predictions = model.predict(df)\n",
+    "\n",
+    "# Add the predictions to the DataFrame\n",
+    "df['Predicted_Target'] = predictions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d3694a20",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a5e60413",
+   "metadata": {},
+   "source": [
+    "When you load a trained model, the model object itself doesn't inherently know what the target variable is. The model object primarily contains the learned parameters and configurations from the training process. Therefore, it's important to keep track of the target variable separately and ensure consistency when using the model.\n",
+    "\n",
+    "During the training phase, you would have explicitly specified the target variable when training the model. The model is trained to learn the relationship between the input features and the specified target variable. The trained model captures this relationship in its learned parameters.\n",
+    "\n",
+    "When you load the trained model into a new session or environment, you need to ensure that you have the necessary data with the same structure and feature names as used during training. You would typically provide the input features to the loaded model and expect the model to make predictions or classifications based on the learned patterns.\n",
+    "\n",
+    "In summary, the loaded model itself doesn't have explicit knowledge of the target variable. It relies on you to provide the appropriate input features and expects you to know the target variable for making predictions or classifications."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d78d0940",
+   "metadata": {},
+   "source": [
+    "### Adding the new_df of ID and Satisifaction columns to the df with predictions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "95b897d8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df2 = pd.concat([new_df,df], axis=1)\n",
+    "df2.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0772e29d",
+   "metadata": {},
+   "source": [
+    "### Adding the prediction details to see what matches"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "11645c16",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df2['Comparison'] = np.where(df2['Satisfaction'] == df2['Predicted_Target'], 'Match', 'Non-Matching')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4a3b7580",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df2.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8c99eca7",
+   "metadata": {},
+   "source": [
+    "### Reorganizing the columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fde4e2c7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "columns = list(df2.columns)\n",
+    "predicted_target_index = columns.index('Predicted_Target')\n",
+    "comparison_index = columns.index('Comparison')\n",
+    "\n",
+    "columns.insert(2, columns.pop(predicted_target_index))\n",
+    "columns.insert(3, columns.pop(comparison_index))\n",
+    "\n",
+    "df2 = df2[columns]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6d771b19",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df2.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f077988a",
+   "metadata": {},
+   "source": [
+    "### Viewing the matrix "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "75a831bb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "\n",
+    "# Get the actual and predicted labels\n",
+    "y_actual = df2['Satisfaction']\n",
+    "y_predicted = df2['Predicted_Target']\n",
+    "\n",
+    "# Create the confusion matrix\n",
+    "confusion_matrix = np.zeros((2, 2))\n",
+    "\n",
+    "for actual, predicted in zip(y_actual, y_predicted):\n",
+    "    confusion_matrix[actual, predicted] += 1\n",
+    "\n",
+    "# Set the labels for the matrix\n",
+    "labels = ['Negative', 'Positive']\n",
+    "\n",
+    "# Plot the confusion matrix\n",
+    "fig, ax = plt.subplots()\n",
+    "im = ax.imshow(confusion_matrix, cmap='Blues')\n",
+    "\n",
+    "# Add colorbar\n",
+    "#cbar = ax.figure.colorbar(im, ax=ax)\n",
+    "\n",
+    "# Set tick labels\n",
+    "ax.set_xticks(np.arange(2))\n",
+    "ax.set_yticks(np.arange(2))\n",
+    "ax.set_xticklabels(labels)\n",
+    "ax.set_yticklabels(labels)\n",
+    "\n",
+    "# Set axis labels and title\n",
+    "ax.set_xlabel('Predicted Target')\n",
+    "ax.set_ylabel('Actual Satisfaction')\n",
+    "ax.set_title('Confusion Matrix')\n",
+    "\n",
+    "# Loop over data dimensions and create text annotations\n",
+    "for i in range(2):\n",
+    "    for j in range(2):\n",
+    "        text = ax.text(j, i, int(confusion_matrix[i, j]),\n",
+    "                       ha=\"center\", va=\"center\", color=\"black\")\n",
+    "\n",
+    "\n",
+    "# Display the plot\n",
+    "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e2192b11",
+   "metadata": {},
+   "source": [
+    "### Full Model Prediction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7e376262",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df2.to_csv('Cleaned DF\\Full_Model_Prediction_XGBoost_DF.csv', index=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2fceaa0e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df2.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e3cf50c0",
+   "metadata": {},
+   "source": [
+    "### Next is to add this prediction to the full and cleaned non-normalized dataframe"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "672a3826",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# For cluster analysis\n",
+    "\n",
+    "df3 = pd.read_csv(\"Cleaned DF/Cleaned_XGBoost_DF.csv\") "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a627fb29",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df3.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e8957500",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Keep only these two columns from the dataframe with the predictions/results\n",
+    "\n",
+    "columns_to_keep = df2[['Predicted_Target','Comparison']]\n",
+    "columns_to_keep.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cab3a45e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Join them togethe (non-normalized data)\n",
+    "\n",
+    "df4 = pd.concat([columns_to_keep,df3], axis=1)\n",
+    "df4.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a7155b5b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Reorganize the columns\n",
+    "\n",
+    "cols = df4.columns.tolist()  # Get the list of column names\n",
+    "cols = [cols[2]] + [cols[21]] + cols[:2] + cols[3:21] + cols[22:]  # Rearrange the column order\n",
+    "df4 = df4[cols]  # Reassign the columns to the DataFrame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d6a21982",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df4.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3c4f8d78",
+   "metadata": {},
+   "source": [
+    "### Full Model Prediction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c7b6a46e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df4.to_csv('Cleaned DF\\Full_Model_Prediction_OG_XGBoost_DF.csv', index=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "81b81fa3",
+   "metadata": {},
+   "source": [
+    "### Done"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
